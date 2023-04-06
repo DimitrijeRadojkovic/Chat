@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <form id="form">
+            <input type="text" id="username"><br>
+            <input type="text" id="text"><br>
+            <input type="submit" value="Send">
+        </form>
+        <div id="messages" style="height: 900px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; flex-wrap: wrap;">
+
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        let socket = io();
+
+document.getElementById("form").onsubmit = async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const text = document.getElementById("text").value;
+    const date = (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString();
+
+    try{
+        /*const res = await fetch("/sendmessage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username, text, date})
+        });*/
+
+        socket.emit("chat message", {username, text, date});
+        
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const res = await fetch("/getall");
+    const json = await res.json();
+    console.log(json);
+    json.map(x => {
+        let div = document.createElement("div");
+        let h1 = document.createElement("h1");
+        let p = document.createElement("p");
+        let p2 = document.createElement("p");
+
+        h1.innerHTML = x.username;
+        p.innerHTML = x.messages.text;
+        p2.innerHTML = x.messages.date;
+
+        div.appendChild(h1);
+        div.appendChild(p);
+        div.appendChild(p2);
+
+        document.getElementById("messages").appendChild(div);
+    });
+});
+
+socket.on("chat message", (msg) => {
+    let div = document.createElement("div");
+    let h1 = document.createElement("h1");
+    let p = document.createElement("p");
+    let p2 = document.createElement("p");
+
+    h1.innerHTML = msg.username;
+    p.innerHTML = msg.text;
+    p2.innerHTML = msg.date;
+
+    div.appendChild(h1);
+    div.appendChild(p);
+    div.appendChild(p2);
+
+    document.getElementById("messages").appendChild(div);
+});
+    </script>
+</body>
+</html>
