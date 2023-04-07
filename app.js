@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
@@ -14,6 +16,7 @@ mongoose.connect(uri).then(
     (err) => {console.log(err)}
 )
 
+app.use(cors());
 app.use(express.static("public"));
 
 app.get("/getall", async (req, res) => {

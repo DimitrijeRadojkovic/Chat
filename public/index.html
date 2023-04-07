@@ -8,14 +8,17 @@
 </head>
 <body>
     <div>
-        <form id="form">
-            <input type="text" id="username"><br>
-            <input type="text" id="text"><br>
+        <form id="form" style="position: fixed; bottom: 0; right: 0;">
+            <input type="text" id="username" placeholder="username"><br>
+            <input type="text" id="text" placeholder="text"><br>
             <input type="submit" value="Send">
         </form>
-        <div id="messages" style="height: 900px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; flex-wrap: wrap;">
+        <div style="height: 900px; overflow: auto;">
+            <div id="messages" style="display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
 
+            </div>
         </div>
+        
     </div>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
@@ -63,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         div.appendChild(p2);
 
         document.getElementById("messages").appendChild(div);
+        document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
     });
 });
 
@@ -81,6 +85,7 @@ socket.on("chat message", (msg) => {
     div.appendChild(p2);
 
     document.getElementById("messages").appendChild(div);
+    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
 });
     </script>
 </body>

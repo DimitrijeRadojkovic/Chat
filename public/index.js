@@ -1,3 +1,5 @@
+import io from "https://cdn.socket.io/4.5.4/socket.io.min.js";
+
 let socket = io();
 
 document.getElementById("form").onsubmit = async (e) => {
